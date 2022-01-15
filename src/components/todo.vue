@@ -1,9 +1,9 @@
 <template>
 <div>
-    <input type='text' id="val" name='todo' v-model="val" placeholder="Add a Todo...">
+    <input type='text' name='todo' v-model="val" placeholder="Add a Todo...">
     <button @click="addTodo()">Add</button>
 <ul>
-   <li  v-for='todo in todos' :key='todo.id'>{{todo.text}}</li> 
+   <li @click="toggleClass(todo.text,todo.comp)" :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text' v-text='todo.text'></li> 
 </ul>
 </div>
 </template>
@@ -12,25 +12,36 @@ export default{
      name: 'HelloWorld',
     data(){
         return{
-            todos:[ 
-                { id:0 , text: 'do something' },
-                { id:1, text: 'do another thing'}
-            ]
+            some:true,
+            val :'',
+            todos:[
+                {text:'wake Up' , comp:true},
+                {text:'clean Room',comp:true},
+                {text:'Do some coding',comp:false},
+                {text:'Go to work',comp:false},
+                ]
         }
     },
     methods:{
-        addTodo(){
-             let x = { id: Math.random(), text : val.value};
-             console.log(x);
-            //  console.log( { id: Math.random(), text : val.value});
-             this.todos = this.todos.push( { id: Math.random(), text : val.value});
+        addTodo() {
+
+            let newtodo = {text:this.val,comp:false}
+            console.log(newtodo)
+           this.todos.push(newtodo)
+           this.val = '';
+           
         },
+       
     }
 }
 </script>
 <style scoped>
 *{
     box-sizing:border-box;
+    font-family:sans-serif; 
+}
+.completed{
+    border-right:2px #228822 solid;
 }
 div{
     width:500px;
@@ -73,6 +84,11 @@ li{
     background:#eee;
     padding-right:10px;
     padding-left:10px;
-    font-size:14px;
+    font-size:16px;
+    font-weight:bold;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+     border-right:2px red solid;
+
 }
 </style>
