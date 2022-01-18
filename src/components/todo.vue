@@ -1,11 +1,12 @@
 <template>
-<div>
-    <input type='text' name='todo' v-model="val" placeholder="Add a Todo...">
+<div v-if="todos.length">
+    <input @keypress.enter="addTodo()" type='text' name='todo' v-model="val" placeholder="Add a Todo...">
     <button @click="addTodo()">Add</button>
 <ul>
-   <li @click="toggleClass(todo.text,todo.comp)" :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text' v-text='todo.text'></li> 
+   <li @click="delTodo(todo.text)"  :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text' v-text='todo.text'></li>
 </ul>
 </div>
+<div v-else>Oops! Nothing left to do :)</div>
 </template>
 <script>
 export default{
@@ -26,12 +27,39 @@ export default{
         addTodo() {
 
             let newtodo = {text:this.val,comp:false}
-            console.log(newtodo)
            this.todos.push(newtodo)
            this.val = '';
            
         },
-       
+       toggleClass(todo){
+           todo.comp = !todo.comp;
+           
+        //   for(let i =0 ; i<this.todos.length; i++){
+        //     //   console.log(this.todos[i].text)
+        //     if(this.todos[i].text == todo){
+        //         // let to = this.todos[i];
+        //         this.todos[i].comp = !this.todos[i].comp;
+        //     // console.log(to)
+        //     }
+        //   }
+       },
+       delTodo(id)
+       {
+           this.todos = this.todos.filter(todo=> todo.text != id)
+        //   for(let i =0 ; i<this.todos.length; i++){
+        //     //   console.log(this.todos[i].text)
+        //     if(this.todos[i].text == todo){
+        //         let to = {text:this.todos[i].text, comp:this.todos[i].comp};
+        //         console.log(to)
+        //         this.todos.filter(function(to){
+        //             // if(this.todos.to)
+        //         })
+        //         // this.todos[i].comp = !this.todos[i].comp;
+        //         // this.todos.filter(to => !this.todos.to)
+        //     // console.log(to)
+        //     }
+        //   }
+       }
     }
 }
 </script>
@@ -89,6 +117,6 @@ li{
     border-top-right-radius:0;
     border-bottom-right-radius:0;
      border-right:2px red solid;
-
+     cursor: pointer;
 }
 </style>
