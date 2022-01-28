@@ -1,12 +1,15 @@
 <template>
-<div v-if="todos.length">
+<div>
     <input @keypress.enter="addTodo()" type='text' name='todo' v-model="val" placeholder="Add a Todo...">
-    <button @click="addTodo()">Add</button>
-<ul>
-   <li @click="delTodo(todo.text)"  :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text' v-text='todo.text'></li>
+    <button @click="addTodo()" class="add">Add</button>
+<ul v-if="todos.length">
+   <li @click="toggleClass(todo)"  :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text'>
+       {{todo.text}}
+       <button @click="delTodo(todo.text)" class="remove-todo">Remove</button>
+   </li>
 </ul>
+<div v-else class="nothing">Oops! Nothing left to do :)</div>
 </div>
-<div v-else>Oops! Nothing left to do :)</div>
 </template>
 <script>
 export default{
@@ -25,11 +28,9 @@ export default{
     },
     methods:{
         addTodo() {
-
             let newtodo = {text:this.val,comp:false}
            this.todos.push(newtodo)
            this.val = '';
-           
         },
        toggleClass(todo){
            todo.comp = !todo.comp;
@@ -74,9 +75,10 @@ export default{
 div{
     width:500px;
     margin:auto;
+
 }
 input{
-    width:80%;
+    width:88%;
     height:40px;
     border:1px darkgrey solid;
     border-radius:5px;
@@ -84,25 +86,17 @@ input{
     padding-right:10px;
     padding-left:10px;
 }
-button{
-    width:calc((100% - 80%) - 2px);
-    height:40px;
-    background:#228822;
-    border:none;
-    border-radius:5px;
-    margin-left:2px;
-    color:white;
-    cursor:pointer;
-}
 ul{
     width:100%;
     list-style:none;
     padding:0;
     margin:0;
-    margin-top:70px;
 }
+   .nothing,ul{
+       margin-top:70px;
+   }
 li{
-    width:100%;
+    width:88%;
     display:flex;
     justify-content:flex-start;
     align-items:center;
@@ -118,5 +112,26 @@ li{
     border-bottom-right-radius:0;
      border-right:2px red solid;
      cursor: pointer;
+     position:relative;
 }
+.add,.remove-todo{
+    width:50px;
+    height:40px;
+    border:none;
+    border-radius:5px;
+    color:white;
+    cursor:pointer;
+}
+.add{
+     background:#228822;
+      margin-left:4px;
+}
+  .remove-todo {
+      position:absolute;
+    background-color:red;
+    transform:translateX(435px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    }
 </style>
