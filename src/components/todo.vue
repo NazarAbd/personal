@@ -62,8 +62,6 @@ export default{
            this.val ='';
            this.theOneToEdit = '';
            this.edit = !this.edit;
-           console.log(this.val);
-           console.log(this.theOneToEdit)
 
        }
     }
