@@ -1,11 +1,13 @@
 <template>
 <div>
     <input @keypress.enter="addTodo()" type='text' name='todo' v-model="val" placeholder="Add a Todo...">
-    <button @click="addTodo()" class="add">Add</button>
+    <button @click="addTodo()" class="add" v-if="!edit">Add</button>
+    <button @click="updateTodo()" class=" add done" v-else>Done</button>
 <ul v-if="todos.length">
    <li @click="toggleClass(todo)"  :class='{ "completed" : todo.comp }'  v-for='todo in todos' :key='todo.text'>
        {{todo.text}}
        <button @click="delTodo(todo.text)" class="remove-todo">Remove</button>
+       <button @click="editTodo(todo.text)" class="edit-todo">Edit</button>
    </li>
 </ul>
 <div v-else class="nothing">Oops! Nothing left to do :)</div>
@@ -18,6 +20,8 @@ export default{
         return{
             some:true,
             val :'',
+            edit: false,
+            theOneToEdit:'',
             todos:[
                 {text:'wake Up' , comp:true},
                 {text:'clean Room',comp:true},
@@ -28,38 +32,39 @@ export default{
     },
     methods:{
         addTodo() {
-            let newtodo = {text:this.val,comp:false}
-           this.todos.push(newtodo)
-           this.val = '';
+            if(this.val != '')
+            {
+                let newtodo = {text:this.val,comp:false}
+               this.todos.push(newtodo)
+               this.val = '';
+            }
         },
        toggleClass(todo){
            todo.comp = !todo.comp;
-           
-        //   for(let i =0 ; i<this.todos.length; i++){
-        //     //   console.log(this.todos[i].text)
-        //     if(this.todos[i].text == todo){
-        //         // let to = this.todos[i];
-        //         this.todos[i].comp = !this.todos[i].comp;
-        //     // console.log(to)
-        //     }
-        //   }
        },
        delTodo(id)
        {
            this.todos = this.todos.filter(todo=> todo.text != id)
-        //   for(let i =0 ; i<this.todos.length; i++){
-        //     //   console.log(this.todos[i].text)
-        //     if(this.todos[i].text == todo){
-        //         let to = {text:this.todos[i].text, comp:this.todos[i].comp};
-        //         console.log(to)
-        //         this.todos.filter(function(to){
-        //             // if(this.todos.to)
-        //         })
-        //         // this.todos[i].comp = !this.todos[i].comp;
-        //         // this.todos.filter(to => !this.todos.to)
-        //     // console.log(to)
-        //     }
-        //   }
+     
+       },
+       editTodo(id){
+           this.edit = !this.edit;
+           this.theOneToEdit = id;
+           this.val = id;
+       },
+       updateTodo(){
+           for(let i = 0; i < this.todos.length; i++){
+               if(this.todos[i].text == this.theOneToEdit)
+               {
+                   this.todos[i].text = this.val;
+               }
+           }
+           this.val ='';
+           this.theOneToEdit = '';
+           this.edit = !this.edit;
+           console.log(this.val);
+           console.log(this.theOneToEdit)
+
        }
     }
 }
@@ -85,6 +90,7 @@ input{
     background:#eee;
     padding-right:10px;
     padding-left:10px;
+    position:relative;
 }
 ul{
     width:100%;
@@ -96,7 +102,7 @@ ul{
        margin-top:70px;
    }
 li{
-    width:88%;
+    width:82%;
     display:flex;
     justify-content:flex-start;
     align-items:center;
@@ -114,7 +120,7 @@ li{
      cursor: pointer;
      position:relative;
 }
-.add,.remove-todo{
+.add,.remove-todo,.edit-todo{
     width:50px;
     height:40px;
     border:none;
@@ -126,12 +132,19 @@ li{
      background:#228822;
       margin-left:4px;
 }
-  .remove-todo {
-      position:absolute;
-    background-color:red;
-    transform:translateX(435px);
+  .remove-todo,.edit-todo {
+    position:absolute;
     display:flex;
     justify-content:center;
     align-items:center;
+    }
+    .remove-todo{
+        background-color:red;
+        transform:translateX(438px);
+    }
+    .edit-todo{
+        width:auto;
+          background-color:rgb(45, 197, 113);
+    transform:translateX(405px);
     }
 </style>
